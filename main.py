@@ -1,9 +1,8 @@
-from pyrogram import Client, filters, emoji
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup
-from pyrogram import types
+from pyrogram import Client, filters, emoji, types
+from pyrogram.types import (InlineKeyboardMarkup, InlineKeyboardButton,
+                            ReplyKeyboardMarkup, Message)
 from importlib import reload
 from string import ascii_lowercase
-from pyrogram.types import Message
 from datetime import datetime
 import json
 import handeler
@@ -389,8 +388,8 @@ def app(sender: Client, message):
         replay_message = 'command not found Try **/cmd** or **/help**'
         bot.send_message(chat_id=username, text=f'\u26a0\ufe0f "{message.text}"  {replay_message} ')
 
-
-bot.run()  # start bot and idle
+if __name__ == "__main__": # start bot and idle
+    bot.run()
 
 # -------------------------#
 #       #Phonebookbot     #
