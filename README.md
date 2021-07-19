@@ -1,4 +1,10 @@
 # <a href="https://telegram.me/FOCPB_bot" rel="nofollow" target="_blank"><img src="https://img.shields.io/badge/Bot-@FOCPB_bot-blue.svg?logo=telegram"></a>
+<h3>:bookmark:This project has been created using :</h3>
+<ul>
+<li><a href= 'https://www.python.org/' target="_blank"><img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"></a></li>
+<li><a href= 'https://docs.pyrogram.org/' target="_blank"><img src="https://img.shields.io/badge/Pyrogram-FFD43B?style=for-the-badge&logo=python&logoColor=orange&Pyrogram"/></a></li>
+</ul>
+
 <h3>Requirements</h3>
 <ul>
 <li><a href= 'https://my.telegram.org/auth' target="_blank">Telegram API key</a></li>
@@ -9,11 +15,6 @@
    <pre><code>pip3 install pyrogram</code></pre>
    <pre><code>git clone https://github.com/rzr1r/PhonebookBot.git</code></pre>
   
-<h3>:bookmark:This project has been created using :</h3>
-<ul>
-<li><a href= 'https://www.python.org/' target="_blank"><img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"></a></li>
-<li><a href= 'https://docs.pyrogram.org/' target="_blank"><img src="https://img.shields.io/badge/Pyrogram-FFD43B?style=for-the-badge&logo=python&logoColor=orange&Pyrogram"/></a></li>
-</ul>
 <h3>:wrench: Contributing</h3>
 <ol>
 <li>Fork the Project</li>
