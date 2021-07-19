@@ -392,7 +392,7 @@ if __name__ == "__main__": # start bot and idle
     bot.run()
 
 # -------------------------#
-#       #Phonebookbot     #
+#       #Phonebookbot      #
 # - Author    : Emad       #
 # - Date      : 07/08/2021 #
 # -------------------------#
