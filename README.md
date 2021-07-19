@@ -1,6 +1,12 @@
 # <a href="https://telegram.me/FOCPB_bot" rel="nofollow" target="_blank"><img src="https://img.shields.io/badge/Bot-@FOCPB_bot-blue.svg?logo=telegram"></a>
+<h3>Requirements</h3>
+<ul>
+<li><a href= 'https://my.telegram.org/auth' target="_blank">Telegram API key</a></li>
+<li>Python 3.6 or higher</li>
+</ul>
 <h3>Installation</h3>
- 
+    
+   <pre><code>pip3 install pyrogram</code></pre>
    <pre><code>git clone https://github.com/rzr1r/PhonebookBot.git</code></pre>
   
 <h3>:bookmark:This project has been created using :</h3>
