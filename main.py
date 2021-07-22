@@ -134,7 +134,7 @@ deleter = False
 sorter = False
 sc_dataset = ['name', 'lastname', 'job', 'company']
 helper_message = '''You can control me by sending these commands: 
-/cmd => Shows Menu of commands
+/cmd => Shows Actions
 /help => Shows this text
 /cancel => Use it to cancel an action
 /time => To see Date and Time
@@ -204,7 +204,7 @@ def app(sender: Client, message):
 
     if username not in store:
         store_user(message, username, timeuser)
-        msg_new = '**To use commands Type /cmd or /help for help (not case sensitive)** or use Keyboard'
+        msg_new = '**To use Actions Type /cmd or /help for help (not case sensitive)** or use Keyboard'
         bot.send_message(chat_id=username, text=f'{msg_new}')
 
     elif message.text.lower() == 'help' or message.text == '/help':
