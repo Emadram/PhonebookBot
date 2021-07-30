@@ -200,7 +200,7 @@ def app(sender: Client, message):
 
     if username not in store:
         store_user(message, username, timeuser)
-        msg_new = '**To use commands Type /cmd or /help for help (not case sensitive)** or use Keyboard'
+        msg_new = '**To use Actions Type /cmd or /help for help (not case sensitive)** or use Keyboard'
         bot.send_message(chat_id=username, text=f'{msg_new}')
 
     elif message.text.lower() == 'help' or message.text == '/help':
