@@ -125,16 +125,12 @@ def sort_file(pm, db):  # sort function
 data = handeler.readfile()  # stored data
 store = []  # to store usernames
 logs = 0  # for logs
-adder = False
-remover = False
-finder = False
-changer = False
-saver = False
-deleter = False
-sorter = False
+actions = {'adder': False, 'remover': False, 'finder': False,'changer': False,'saver': False,
+           'deleter': False,'sorter': False} # actions dict
 sc_dataset = ['name', 'lastname', 'job', 'company']
+# -----------------------------------Help message part---------------------------------- #
 helper_message = '''You can control me by sending these commands: 
-/cmd => Shows Actions
+/cmd => Shows Menu of commands
 /help => Shows this text
 /cancel => Use it to cancel an action
 /time => To see Date and Time
@@ -182,7 +178,7 @@ Status:
 
 @bot.on_message(filters.text & filters.private)
 def app(sender: Client, message):
-    global logs, adder, remover, finder, changer, saver, deleter, sorter
+    global logs, actions  #global part
     username = message.chat.username
     timeuser = datetime.utcfromtimestamp(message.date + 16200).strftime('%Y-%m-%d %H:%M:%S')
     timeuser = timeuser.split()
@@ -193,10 +189,10 @@ def app(sender: Client, message):
         "Loading\u23f3",
         reply_markup=ReplyKeyboardMarkup(
             [
-                ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],# First row
-                ['Cmd', 'Help', 'Time', 'Cancel', 'Confirm'], # sec row
-                ['Name', 'Lastname', 'Job', 'Company'] # third row
-                 
+                ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],  #First row
+                ['Cmd', 'Help', 'Time', 'Cancel', 'Confirm'],  #sec row
+                ['Name', 'Lastname', 'Job', 'Company']  #third row
+
             ],
             resize_keyboard=True  # Make the keyboard smaller
         )
@@ -204,7 +200,7 @@ def app(sender: Client, message):
 
     if username not in store:
         store_user(message, username, timeuser)
-        msg_new = '**To use Actions Type /cmd or /help for help (not case sensitive)** or use Keyboard'
+        msg_new = '**To use commands Type /cmd or /help for help (not case sensitive)** or use Keyboard'
         bot.send_message(chat_id=username, text=f'{msg_new}')
 
     elif message.text.lower() == 'help' or message.text == '/help':
@@ -231,23 +227,26 @@ def app(sender: Client, message):
                              [start_save, start_delete], [start_sort]])
         bot.send_message(username, '----Commands----', reply_markup=start_keyboard)
 
-        # ----------------------------------query part------------------------------------------- #
+        # ----------------------------------query part---------------------------------------------- #
         @bot.on_callback_query()
         def start_callback(csend: Client, callback_query):
+            global actions #global part
             callback_query.answer(f'Button cooldown', show_alert=True)
 
             # ----------------------------------show part------------------------------------------- #
             if callback_query.data == 'show':
                 show(message, data)  # function call
 
-            # ----------------------------------show_people part------------------------------------------- #
+            # ----------------------------------show_people part------------------------------------ #
             elif callback_query.data == 'show_people':
                 show_people(message, data)  # function call
 
-            # ----------------------------------add part---------------------------------------------------- #
+            # ----------------------------------Action holder part---------------------------------- #
+            elif list(actions.values()).count(True) != 0:
+                bot.send_message(chat_id=username, text='**\u26a0\ufe0fA action is available right now**')
+            # ----------------------------------add part-------------------------------------------- #
             elif callback_query.data == 'add':
-                global adder
-                adder = True
+                actions['adder'] = True
                 bot.send_message(chat_id=username, text='**Enter details as shown below to add (Shift+Enter)**')
                 bot.send_message(chat_id=username,
                                  text='**Name:**\n**Lastname:**\n**Job**:\n**Company:**\n')
@@ -255,49 +254,43 @@ def app(sender: Client, message):
             # ----------------------------------remove part------------------------------------------------- #
             elif callback_query.data == 'remove':
                 show(message, data)  # function call
-                global remover
-                remover = True
+                actions['remover'] = True
                 bot.send_message(chat_id=username, text='** Enter index of person you want to remove **')
 
             # ----------------------------------find part------------------------------------------------- #
             elif callback_query.data == 'find':
-                global finder
-                finder = True
+                actions['finder'] = True
                 bot.send_message(chat_id=username, text='** Enter the lastname of person you want to find **')
 
             # ----------------------------------change part------------------------------------------------- #
             elif callback_query.data == 'change':
                 show(message, data)  # function call
-                global changer
-                changer = True
+                actions['changer'] = True
                 bot.send_message(chat_id=username, text='**Enter details as shown below to change (Shift+Enter)**')
                 bot.send_message(chat_id=username,
                                  text='**Index:**\n**What to be changed e.g  (job):**\n**To what e.g  (Developer):**')
             # ----------------------------------save part--------------------------------------------------- #
             elif callback_query.data == 'save':
-                global saver
-                saver = True
+                actions['saver'] = True
                 bot.send_message(chat_id=username, text='**Enter confirm to save data**')
             # ----------------------------------delete part--------------------------------------------------- #
             elif callback_query.data == 'delete':
-                global deleter
-                deleter = True
+                actions['deleter'] = True
                 bot.send_message(chat_id=username, text='**Enter confirm to delete data**')
             # ----------------------------------sort part----------------------------------------------------- #
             elif callback_query.data == 'sort':
-                global sorter
-                sorter = True
+                actions['sorter'] = True
                 bot.send_message(chat_id=username, text='**Enter how you want to sort by :**')
 
     # ----------------------------------add conditions part------------------------------------------- #
-    elif adder:  # for adding a user
+    elif actions['adder']:  # for adding a user
         check_digit = [ele for ele in message.text.split() if ele.isdigit()]
         if len(check_digit) == 0 and len(message.text.split()) == 4:
-            adder = False
+            actions['adder'] = False
             add_people(message, data)  # function call
             bot.send_message(chat_id=username, text=f'**\u2705Added successfully**')
         elif message.text.lower() == 'cancel' or message.text == '/cancel':
-            adder = False
+            actions['adder'] = False
             bot.send_message(chat_id=username, text=f'**Canceled\u26d4**')
        	elif len(check_digit) != 0 and len(message.text.split()) == 4:
        		bot.send_message(chat_id=username, text=f'\u26a0\ufe0fExpected string got int instead **Try again**')
@@ -305,23 +298,23 @@ def app(sender: Client, message):
             bot.send_message(chat_id=username, text=f'\u26a0\ufe0fError not enough values to unpack **Try again**')
 
     # ----------------------------------remove conditions part------------------------------------------- #
-    elif remover:
+    elif actions['remover']:
         if message.text.isdigit() and int(message.text) <= len(data) != 0:
-            remover = False
+            actions['remover'] = False
             remove_people(message, data)  # function call
             bot.send_message(chat_id=username, text=f'**\u2705Removed successfully**')
         elif message.text.lower() == 'cancel' or message.text == '/cancel':
-            remover = False
+            actions['remover'] = False
             bot.send_message(chat_id=username, text=f'**Canceled\u26d4**')
         else:
             bot.send_message(chat_id=username, text=f'\u26a0\ufe0fError index out of range **Try again**')
     # ----------------------------------find conditions part------------------------------------------- #
-    elif finder:
+    elif actions['finder']:
         data_values = []
         for i in range(len(data)):
             data_values.append(data[str(i)][1])
         if message.text in data_values:
-            finder = False
+            actions['finder'] = False
             idx = data_values.index(message.text)  # indexer
             output = f'**Name: {data[str(idx)][0]}\nLastname: {data[str(idx)][1]}\n**'
             output += f'**Job: {data[str(idx)][2]}\nCompany: {data[str(idx)][3]}\n**'
@@ -331,52 +324,52 @@ def app(sender: Client, message):
                 output += 'Status:  \u26d4\n'
             bot.send_message(chat_id=username, text=output)
         elif message.text.lower() == 'cancel' or message.text == '/cancel':
-            finder = False
+            actions['finder'] = False
             bot.send_message(chat_id=username, text=f'**Canceled\u26d4**')
         else:
             bot.send_message(chat_id=username, text=f'\u26a0\ufe0fError lastname not found **Try again**')
     # ----------------------------------change conditions part------------------------------------------- #
-    elif changer:
+    elif actions['changer']:
         if message.text.lower() == 'cancel' or message.text == '/cancel':
-            changer = False
+            actions['changer'] = False
             bot.send_message(chat_id=username, text=f'**Canceled\u26d4**')
         elif len(message.text.split()) == 3 and message.text.split()[1] in sc_dataset:
-            changer = False
+            actions['changer'] = False
             change_people(message, data)
             bot.send_message(chat_id=username, text=f'**\u2705Changed successfully**')
         else:
             bot.send_message(chat_id=username, text=f'\u26a0\ufe0fError not enough values to unpack **Try again**')
     # ----------------------------------save conditions part------------------------------------------- #
-    elif saver:
+    elif actions['saver']:
         if message.text.lower() == 'confirm':
-            saver = False
+            actions['saver'] = False
             save_file(data)
             bot.send_message(chat_id=username, text=f'**\u2705Saved successfully**')
         elif message.text.lower() == 'cancel' or message.text == '/cancel':
-            saver = False
+            actions['saver'] = False
             bot.send_message(chat_id=username, text=f'**Canceled\u26d4**')
         else:
             bot.send_message(chat_id=username, text=f'\u26a0\ufe0fError Invalid **Try again**')
     # ----------------------------------delete conditions part------------------------------------------- #
-    elif deleter:
+    elif actions['deleter']:
         if message.text.lower() == 'confirm':
-            deleter = False
+            actions['deleter'] = False
             delete_file()
             bot.send_message(chat_id=username, text=f'**\u2705Deleted successfully**')
         elif message.text.lower() == 'cancel' or message.text == '/cancel':
-            deleter = False
+            actions['deleter'] = False
             bot.send_message(chat_id=username, text=f'**Canceled\u26d4**')
         else:
             bot.send_message(chat_id=username, text=f'\u26a0\ufe0fError Invalid **Try again**')
 
     # ----------------------------------sort conditions part------------------------------------------- #
-    elif sorter:
+    elif actions['sorter']:
         if not message.text.isdigit() and message.text.lower() in sc_dataset:
-            sorter = False
+            actions['sorter'] = False
             sort_file(message, data)
             bot.send_message(chat_id=username, text=f'**\u2705Sorted by {message.text} successfully**')
         elif message.text.lower() == 'cancel' or message.text == '/cancel':
-            sorter = False
+            actions['sorter'] = False
             bot.send_message(chat_id=username, text=f'**Canceled\u26d4**')
         else:
             bot.send_message(chat_id=username, text=f'\u26a0\ufe0fError Invalid **Try again**')
@@ -388,11 +381,10 @@ def app(sender: Client, message):
         replay_message = 'command not found Try **/cmd** or **/help**'
         bot.send_message(chat_id=username, text=f'\u26a0\ufe0f "{message.text}"  {replay_message} ')
 
-if __name__ == "__main__": # start bot and idle
-    bot.run()
+bot.run()
 
-# -------------------------#
-#       #Phonebookbot      #
-# - Author    : Emad       #
-# - Date      : 08/08/2021 #
-# -------------------------#
+# --------------------------------#
+#       #Phonebookbot             #
+# - Author    : Emad Ramezani     #
+# - Date      : 08/08/2021        #
+# --------------------------------#
