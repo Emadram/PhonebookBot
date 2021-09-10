@@ -185,7 +185,7 @@ def app(sender: Client, message):
     logs += 1
     print(f'{logs} {username} {timeuser}')
     bot.send_message(
-        f"{username}",  # Edit this
+        f"{username}",
         "Loading\u23f3",
         reply_markup=ReplyKeyboardMarkup(
             [
